@@ -1,5 +1,8 @@
 import numpy as np
+import sys
+sys.path.insert(1, 'common')
 from initialization import initialization
+
 def GWO(SearchAgents_no, Max_iter, lb, ub, dim, fobj):
     # Initialize alpha, beta, and delta_pos
     Alpha_pos = np.zeros(dim)

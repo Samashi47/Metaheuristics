@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
-from Get_Functions_details import Get_Functions_details
 from GWO import GWO
+import sys
+sys.path.insert(1, 'common')
+from Get_Functions_details import Get_Functions_details
 from func_plot import func_plot
 
 # Number of search agents

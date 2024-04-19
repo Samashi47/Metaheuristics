@@ -13,6 +13,6 @@ def initialization(SearchAgents_no, dim, ub, lb):
         for i in range(dim):
             ub_i = ub[i]
             lb_i = lb[i]
-            Positions[:, i] = np.random.rand(SearchAgents_no, 1) * (ub_i - lb_i) + lb_i
+            Positions[:, i] = np.random.rand(SearchAgents_no) * (ub_i - lb_i) + lb_i
 
     return Positions

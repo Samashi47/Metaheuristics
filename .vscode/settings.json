@@ -105,5 +105,8 @@
     "stdexcept": "cpp",
     "streambuf": "cpp",
     "typeinfo": "cpp"
-  }
+  },
+  "python.analysis.extraPaths": [
+    "./Grey Wolf Optimizer"
+  ]
 }
