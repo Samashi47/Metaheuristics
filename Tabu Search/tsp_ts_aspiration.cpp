@@ -82,6 +82,16 @@ vector<vector<int>> inversion(const vector<int> &solution)
     return AllMove;
 }
 
+vector<int> function_2optSwap(vector<int>& route, int v1, int v2) {
+    vector<int> new_route;
+    new_route.insert(new_route.end(), route.begin(), route.begin() + v1 + 1);
+    vector<int> temp(route.begin() + v1 + 1, route.begin() + v2 + 1);
+    reverse(temp.begin(), temp.end());
+    new_route.insert(new_route.end(), temp.begin(), temp.end());
+    new_route.insert(new_route.end(), route.begin() + v2 + 1, route.end());
+    return new_route;
+}
+
 vector<int> tabu_search(const vector<vector<int>> &matrice)
 {
     srand(time(NULL)); // Seed
