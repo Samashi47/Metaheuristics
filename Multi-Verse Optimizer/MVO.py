@@ -70,7 +70,7 @@ def MVO(N, Max_time, lb, ub, dim, fobj):
                     # Eq. (3.1) in the paper
                     Universes[Back_hole_index, j] = Sorted_universes[White_hole_index, j]
 
-                if len(lb) == 1:
+                if isinstance(lb, (int, float)):
                     # Eq. (3.2) in the paper if the boundaries are all the same
                     r2 = np.random.rand()
                     if r2 < WEP:
@@ -80,7 +80,7 @@ def MVO(N, Max_time, lb, ub, dim, fobj):
                         if r3 > 0.5:
                             Universes[i, j] = Best_universe[j] - TDR * ((ub - lb) * np.random.rand() + lb)
 
-                if len(lb) != 1:
+                if isinstance(lb, list):
                     # Eq. (3.2) in the paper if the upper and lower bounds are different for each variables
                     r2 = np.random.rand()
                     if r2 < WEP:
