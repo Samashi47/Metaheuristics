@@ -1,7 +1,7 @@
 import numpy as np
-from RouletteWheelSelection import RouletteWheelSelection
 import sys
 sys.path.insert(1, 'common')
+from RouletteWheelSelection import RouletteWheelSelection # type: ignore
 from initialization import initialization # type: ignore
 
 def MVO(N, Max_time, lb, ub, dim, fobj):
