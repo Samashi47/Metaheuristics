@@ -2,8 +2,8 @@ import matplotlib.pyplot as plt
 from GWO import GWO
 import sys
 sys.path.insert(1, 'common')
-from Get_Functions_details import Get_Functions_details
-from func_plot import func_plot
+from Get_Functions_details import Get_Functions_details # type: ignore
+from func_plot import func_plot # type: ignore
 
 # Number of search agents
 SearchAgents_no = 30
