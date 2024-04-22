@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 from GWO import GWO
 import sys
 sys.path.insert(1, 'common')
