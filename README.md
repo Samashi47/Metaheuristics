@@ -17,7 +17,8 @@ The Python implementations in this repository for GWO [[1]](#1)[[2]](#2), MVO [[
 |-----------------------|--------------------|--------------------|
 | Genetic Algorithms    |        :x:         | :white_check_mark: |
 | Tabu Search           |        :x:         | :white_check_mark: |
-| Simulated Annealing   | :white_check_mark: |        :x:         |
+| Simulated Annealing   |        :x:         | :white_check_mark: |
+| Grey Wolf Optimizer   | :white_check_mark: |        :x:         |
 | Multi-Verse Optimizer | :white_check_mark: |        :x:         |
 | Ant Lion Optimizer    | :white_check_mark: |        :x:         |
 
