@@ -1,7 +1,5 @@
 import numpy as np
 
-import numpy as np
-
 def Random_walk_around_antlion(Dim, max_iter, lb, ub, antlion, current_iter):
     lb = np.array(lb)
     ub = np.array(ub)

@@ -29,7 +29,7 @@ def Get_Functions_details(F):
     return switcher.get(F, "Invalid function")
 
 def F1(x):
-    return np.sum(x**2)
+    return np.sum(np.array(x)**2)
 
 def F2(x):
     return np.sum(np.abs(x)) + np.prod(np.abs(x))
@@ -57,7 +57,7 @@ def F8(x):
 
 def F9(x):
     dim = len(x)
-    return np.sum(x**2 - 10*np.cos(2*np.pi*x)) + 10*dim
+    return np.sum(np.array(x)**2 - 10*np.cos(2*np.pi*x)) + 10*dim
 
 def F10(x):
     dim = len(x)
@@ -65,7 +65,7 @@ def F10(x):
 
 def F11(x):
     dim = len(x)
-    return np.sum(x**2)/4000 - np.prod(np.cos(x/np.sqrt([i+1 for i in range(dim)]))) + 1
+    return np.sum(np.array(x)**2)/4000 - np.prod(np.cos(x/np.sqrt([i+1 for i in range(dim)]))) + 1
 
 def F12(x):
     dim = len(x)

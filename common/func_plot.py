@@ -1,8 +1,9 @@
 import numpy as np
-import matplotlib.pyplot as plt
+import plotly.graph_objects as go
 from Get_Functions_details import Get_Functions_details
-def func_plot(func_name):
-    lb, ub, dim, fobj = Get_Functions_details(func_name)
+
+def func_plot(func_name,Best_pos,algo_name):
+    fobj, lb, ub, dim = Get_Functions_details(func_name)
 
     if func_name in ['F1', 'F2', 'F3', 'F4', 'F6', 'F14']:
         x = y = np.arange(-100, 101, 2)
@@ -40,8 +41,21 @@ def func_plot(func_name):
                 f[i, j] = fobj([x[i], y[j], 0, 0, 0, 0])
             if func_name in ['F21', 'F22', 'F23']:
                 f[i, j] = fobj([x[i], y[j], 0, 0])
-
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
-    ax.plot_surface(x, y, f, rstride=1, cstride=1, color='c', alpha=0.6, linewidth=0)
-    plt.show()
+                
+    fig = go.Figure(data=[go.Surface(z=f, x=x, y=y, colorscale="Reds", opacity=0.5)])
+    fig.add_trace(go.Scatter3d(x=[Best_pos[0]], y=[Best_pos[1]], z=[fobj(Best_pos)],
+                               mode='markers', marker=dict(color='blue', size=5), name=f'Optimum Found using {algo_name}'))
+    fig.update_layout(
+        title= f'Plot for function {func_name} and optimum found using {algo_name}',
+        autosize=False,
+        width=750, 
+        height=750,
+        margin=dict(l=65, r=50, b=65, t=90), 
+        scene_aspectmode='cube',
+        scene=dict(
+            xaxis=dict(title='X'),
+            yaxis=dict(title='Y'),
+            zaxis=dict(title='Z')
+        )
+    )
+    fig.show()
