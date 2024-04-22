@@ -5,8 +5,6 @@ sys.path.insert(1, 'common')
 from initialization import initialization # type: ignore
 from RouletteWheelSelection import RouletteWheelSelection # type: ignore
 
-import numpy as np
-
 def ALO(N, Max_iter, lb, ub, dim, fobj):
     # Initialize the positions of antlions and ants
     antlion_position = initialization(N, dim, ub, lb)
