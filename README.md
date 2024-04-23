@@ -64,7 +64,20 @@ Contributions to this repository are welcome. If you find any issues or have sug
 For any questions or inquiries, please contact the owner of this repository or open an issue.
 
 Happy coding!
-
+## Cite me
+### Bibtex generic citation
+```txt
+@misc{Samady,
+  title={Samashi47/metaheuristics: Implementation of various metaheuristic algorithms in C++ and python},
+  url={https://github.com/Samashi47/Metaheuristics},
+  journal={GitHub},
+  author={Samady, Ahmed}
+}
+```
+### APA7
+```txt
+Samady, A. Samashi47/metaheuristics: Implementation of various metaheuristic algorithms in C++ and python. GitHub. https://github.com/Samashi47/Metaheuristics
+```
 ## References
 
 <a id="1">[1]</a> Seyedali Mirjalili (2024). Grey Wolf Optimizer (GWO) [MATLAB Central File Exchange](https://www.mathworks.com/matlabcentral/fileexchange/44974-grey-wolf-optimizer-gwo). Retrieved April 22, 2024. \
