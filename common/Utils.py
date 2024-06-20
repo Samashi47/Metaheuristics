@@ -33,6 +33,18 @@ class Utils:
     
     def Get_Functions_details(self, F):
         switcher = {
+            'bentCigar': (self.bentCigar, -100, 100, 3),
+            'zakharov': (self.zakharov, -100, 100, 3),
+            'rosenbrock': (self.rosenbrock, -100, 100, 3),
+            'rastrigin': (self.rastrigin, -100, 100, 3),
+            'schafferF6': (self.schafferF6, -100, 100, 3),
+            'levy': (self.levy, -100, 100, 3),
+            'HighConditionedElliptic': (self.HighConditionedElliptic, -100, 100, 3),
+            'discus': (self.discus, -100, 100, 3),
+            'ackley': (self.ackley, -100, 100, 3),
+            'weierstrass': (self.weierstrass, -100, 100, 3),
+            'griewank': (self.griewank, -100, 100, 3),
+            'happyCat': (self.happyCat, -100, 100, 3),
             'F1': (self.F1, -100, 100, 30),
             'F2': (self.F2, -10, 10, 30),
             'F3': (self.F3, -100, 100, 30),
@@ -58,7 +70,70 @@ class Utils:
             'F23': (self.F23, 0, 10, 4)
         }
         return switcher.get(F, "Invalid function")
-
+    
+    def bentCigar(self, x):
+        x = np.array(x).ravel()
+        return x[0]**2 + 10**6 * np.sum(x[1:]**2)
+    
+    def zakharov(self, x):
+        x = np.array(x).ravel()
+        return np.sum(x**2) + (np.sum(0.5*x))**2 + (np.sum(0.5*x))**4
+    
+    def rosenbrock(self, x):
+        x = np.array(x).ravel()
+        return np.sum(100*(x[:-1]**2 - x[1:])**2 + (x[:-1])**2 - 1)
+    
+    def rastrigin(self, x):
+        x = np.array(x)
+        return np.sum(np.array(x)**2 - 10*np.cos(2*np.pi*x) + 10)
+    
+    def schafferHelper(self, x, y):
+        x, y = np.array(x).ravel(), np.array(y).ravel()
+        return 0.5 + ((np.sin(np.sqrt(x**2 - y**2))**2 - 0.5) / (1 + 0.001*(x**2 + y**2))**2)
+    
+    def schafferF6(self, x):
+        x = np.array(x).ravel()
+        return np.sum(self.schafferHelper(x[:-1], x[1:]))
+    
+    def levyW(self, x):
+        return 1 + (x-1)/4
+    
+    def levy(self, x):
+        x = np.array(x).ravel()
+        w = self.levyW(x)
+        return (np.sin(np.pi*w[0])**2 + np.sum((w[:-1]-1)**2 * (1 + 10*(np.sin(np.pi*w[:-1]+1)**2))) + (w[-1]-1)**2 * (1 + (np.sin(2*np.pi*w[-1])**2)))
+        
+    def HighConditionedElliptic(self, x):
+        x = np.array(x).ravel()
+        return np.sum(10**6**(np.arange(len(x)-1)/(len(x)-1)) * x[:-1]**2)
+    
+    def discus(self, x):
+        x = np.array(x).ravel()
+        return (10**6)*x[0] + np.sum(x[1:]**2)
+    
+    def ackley(self, x):
+        dim = len(x)
+        x = np.array(x).ravel()
+        return -20*np.exp(-0.2*np.sqrt(np.sum(x**2)/dim)) - np.exp(np.sum(np.cos(2*np.pi*x))/dim) + 20 + np.exp(1)
+    
+    def weierstrass(self, x):
+        a, b, kmax = 0.5, 3, 20
+        return np.sum([np.sum([a**k * np.cos(2*np.pi*b**k*(x[i]+0.5)) for k in range(kmax)]) - np.sum([a**k * np.cos(2*np.pi*b**k*0.5) for k in range(kmax)])for i in range(len(x))])
+    
+    def griewank(self, x):
+        x = np.array(x).ravel()
+        return np.sum(x**2/4000) - np.prod(np.cos(x/np.sqrt(np.arange(1, len(x)+1)))) + 1
+    
+    def happyCat(self, x):
+        dim = len(x)
+        x = np.array(x).ravel()
+        return np.abs(np.sum(x**2) - dim)**(1/4) + (0.5*np.sum(x**2) + np.sum(x))/dim + 0.5
+    
+    def F5(self, x):
+        dim = len(x)
+        x = np.array(x)
+        return np.sum(100*(x[1:dim]-(x[0:dim-1]**2))**2 + (x[0:dim-1]-1)**2)
+    
     def Ufun(x, a, k, m):
         return k*((x-a)**m)*(x>a) + k*((-x-a)**m)*(x<(-a))
     
@@ -75,10 +150,6 @@ class Utils:
     def F4(self, x):
         return np.max(np.abs(x))
 
-    def F5(self, x):
-        dim = len(x)
-        x = np.array(x)
-        return np.sum(100*(x[1:dim]-(x[0:dim-1]**2))**2 + (x[0:dim-1]-1)**2)
 
     def F6(self, x):
         x = np.array(x)
@@ -177,8 +248,11 @@ class Utils:
 
     def func_plot(self, func_name,Best_pos,algo_name):
         fobj, lb, ub, dim = self.Get_Functions_details(func_name)
-
-        if func_name in ['F1', 'F2', 'F3', 'F4', 'F6', 'F14']:
+        if func_name in ['bentCigar', 'zakharov', 'rosenbrock', 'rastrigin', 'schafferF6',
+         'levy', 'HighConditionedElliptic', 'discus', 'ackley', 'weierstrass',
+         'griewank', 'happyCat']:
+            x = y = np.arange(-100, 101, 1)
+        elif func_name in ['F1', 'F2', 'F3', 'F4', 'F6', 'F14']:
             x = y = np.arange(-100, 101, 2)
         elif func_name == 'F5':
             x = y = np.arange(-200, 201, 2)
