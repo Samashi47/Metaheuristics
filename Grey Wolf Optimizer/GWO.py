@@ -55,7 +55,8 @@ class GWO:
                 if fitness > Alpha_score and fitness > Beta_score and fitness < Delta_score:
                     Delta_score = fitness  # Update delta
                     Delta_pos = Positions[i, :]
-
+            
+            # a = 2 * np.exp(-(l/(0.3*self.Max_iter))**2)
             a = 2 - l * ((2) / self.Max_iter)  # a decreases linearly from 2 to 0
 
             # Update the Position of search agents including omegas
@@ -93,5 +94,8 @@ class GWO:
 
             Convergence_curve[l] = Alpha_score
             l = l + 1
-
+            # Print the best universe details after every 50 iterations
+            if l % 50 == 0:
+                print('At iteration ', str(l), ' the Alpha wolf fitness is ', str(Alpha_score))
+            
         return Alpha_score, Alpha_pos, Convergence_curve
