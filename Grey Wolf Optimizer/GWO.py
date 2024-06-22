@@ -6,7 +6,7 @@ from Utils import Utils # type: ignore
 class GWO:
     def __init__(self, SearchAgents_no=50, Max_iter=100, lb=-5, ub=5, dim=0, fobj='bentCigar'):
         self.SearchAgents_no = SearchAgents_no
-        self.Max_iter = Max_iter,
+        self.Max_iter = Max_iter
         self.Max_iter = self.Max_iter[0]
         self.lb = lb
         self.ub = ub
@@ -70,11 +70,17 @@ class GWO:
                     D_alpha = abs(C1 * Alpha_pos[j] - Positions[i, j])  # Equation (3.5)-part 1
                     X1 = Alpha_pos[j] - A1 * D_alpha  # Equation (3.6)-part 1
 
+                    r1 = np.random.rand()  # r1 is a random number in [0,1]
+                    r2 = np.random.rand()  # r2 is a random number in [0,1]
+
                     A2 = 2 * a * r1 - a  # Equation (3.3)
                     C2 = 2 * r2  # Equation (3.4)
 
                     D_beta = abs(C2 * Beta_pos[j] - Positions[i, j])  # Equation (3.5)-part 2
                     X2 = Beta_pos[j] - A2 * D_beta  # Equation (3.6)-part 2
+
+                    r1 = np.random.rand()  # r1 is a random number in [0,1]
+                    r2 = np.random.rand()  # r2 is a random number in [0,1]
 
                     A3 = 2 * a * r1 - a  # Equation (3.3)
                     C3 = 2 * r2  # Equation (3.4)
@@ -93,13 +99,12 @@ class GWO:
         return Alpha_score, Alpha_pos, Convergence_curve
 
     def optimize_tsp(self, problem):
-        model = self.utils.CreateModel(problem)
+        problem = self.utils.LoadProblem(problem)
         
-        if model == None:
+        if problem == None:
             print("Could not load TSP problem!!")
             
-        CostFunction = lambda tour: self.utils.TourLength(tour, model)
-        dim = model['n']
+        dim = problem.dimension
         
         Alpha_pos = np.zeros(dim)
         Alpha_score = np.inf 
@@ -124,7 +129,7 @@ class GWO:
                 
                 sol = np.argsort(Positions, axis=1)
                 # Calculate objective function for each search agent
-                fitness = CostFunction(sol[i, :])
+                fitness = problem.trace_tours([sol[i, :] + 1])[0]
                 
                 # Update Alpha, Beta, and Delta
                 if fitness < Alpha_score:
@@ -138,7 +143,7 @@ class GWO:
                 if fitness > Alpha_score and fitness > Beta_score and fitness < Delta_score:
                     Delta_score = fitness  # Update delta
                     Delta_pos = Positions[i, :].copy()
-            # a = 2 * np.exp(-(l/(0.3*self.Max_iter))**2)
+                    
             a = 2 - l * ((2) / self.Max_iter)  # a decreases linearly from 2 to 0
             
             # Update the Position of search agents including omegas
