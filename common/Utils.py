@@ -1,7 +1,71 @@
 import numpy as np
 import plotly.graph_objects as go
+import tsplib95 as tsp
 
 class Utils:
+    def CreateModel(self, problem='eil51'):
+        tsplib = tsp.load('tsp_problems/' + problem + '.tsp')
+        coords = list(tsplib.as_dict()['node_coords'].values())
+        n = np.shape(coords)[0]
+        d = np.zeros((n, n))
+        
+        if tsplib.edge_weight_type == "EUC_2D" or tsplib.edge_weight_type == "CEIL_2D":
+            for i in range(n):
+                for j in range(i + 1, n):
+                    d[i, j] = np.int32(np.sqrt((coords[j][0] - coords[i][0])**2 + (coords[j][1] - coords[i][1])**2))
+                    d[j, i] = d[i, j]
+        elif tsplib.edge_weight_type == "EUC_3D":
+            for i in range(n):
+                for j in range(i + 1, n):
+                    d[i, j] = np.sqrt((coords[j][0] - coords[i][0])**2 + (coords[j][1] - coords[i][1])**2 + (coords[j][2] - coords[i][2])**2)
+                    d[j, i] = d[i, j]
+        elif tsplib.edge_weight_type == "GEO":
+            for i in range(n):
+                for j in range(i + 1, n):
+                    lat1, lon1 = np.radians(coords[i][0]), np.radians(coords[i][1])
+                    lat2, lon2 = np.radians(coords[j][0]), np.radians(coords[j][1])
+                    q1 = np.cos(lon1 - lon2)
+                    q2 = np.cos(lat1 - lat2)
+                    q3 = np.cos(lat1 + lat2)
+                    d[i, j] = np.int32(6378.388 * np.arccos(0.5*((1+q1)*q2 - (1-q1)*q3)) + 1)
+                    d[j, i] = d[i, j]
+        elif tsplib.edge_weight_type == "ATT":
+            for i in range(n):
+                for j in range(i + 1, n):
+                    rij = np.sqrt(((coords[j][0] - coords[i][0])**2 + (coords[j][1] - coords[i][1])**2) / 10)
+                    tij = np.int32(rij)
+                    if tij < rij:
+                        d[i, j] = tij + 1
+                        d[j, i] = d[i, j]
+                    else:
+                        d[i, j] = tij
+                        d[j, i] = d[i, j]
+        elif tsplib.edge_weight_type == "EXPLICIT":
+            n = np.mat(tsplib.edge_weights).shape[0]
+            print(n)
+            d = np.zeros((n, n))
+            for i in range(n):
+                for j in range(i + 1, n):
+                    d[i, j] = tsplib.get_weight(i, j)
+                    d[j, i] = tsplib.get_weight(j, i)
+        else:
+            return None
+        
+        model = {
+            'n': n,
+            'd': d
+        }
+        return model
+
+    def TourLength(self, tour, model):
+        n = len(tour)
+        tour = np.append(tour, tour[0])
+        L = 0
+        for k in range(n):
+            i = tour[k]
+            j = tour[k + 1]
+            L += model['d'][i, j]
+        return L
     
     def RouletteWheelSelection(self, weights):
         accumulation = np.cumsum(weights)
