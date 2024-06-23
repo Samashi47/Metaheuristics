@@ -3,8 +3,8 @@ import sys
 sys.path.insert(1, 'common')
 from Utils import Utils # type: ignore
 
-SearchAgents_no = 40
-Function_name = 'F1'
+SearchAgents_no = 100
+Function_name = 'griewank'
 Max_iteration = 500
 utils = Utils()
 
@@ -15,4 +15,4 @@ Best_score, Best_pos, cg_curve = alo_optimizer.optmize()
 utils.func_plot(Function_name, Best_pos, 'Ant Lion Optimizer')
 
 print(f'The best solution obtained by ALO is : {Best_pos}')
-print(f'The best optimal value of the objective function found by ALO is : {Best_score}')
+print(f'The best optimal value of the {Function_name} function found by ALO is : {Best_score}')
