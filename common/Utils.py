@@ -4,8 +4,10 @@ import tsplib95 as tsp
 
 class Utils:
     def traceTour(self, problem, solution, index):
-        if problem.edge_weight_type != "EXPLICIT" or (problem.edge_weight_format == "LOWER_DIAG_ROW" and problem.display_data_type == "TWOD_DISPLAY"):
-                return problem.trace_tours([solution[index, :] + 1])[0]
+        # Check if conditions lead to the same return value and combine them
+        if (problem.edge_weight_type != "EXPLICIT" or problem.edge_weight_format == "FULL_MATRIX" or 
+            (problem.edge_weight_format in ["LOWER_DIAG_ROW", "UPPER_ROW"] and problem.display_data_type == "TWOD_DISPLAY")):
+            return problem.trace_tours([solution[index, :] + 1])[0]
         else:
             return problem.trace_tours([solution[index, :]])[0]
         
