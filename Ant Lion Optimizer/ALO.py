@@ -152,7 +152,7 @@ class ALO:
 
         for i in range(self.N):
             sol = np.argsort(antlion_position, axis=1)
-            antlions_fitness[i] = problem.trace_tours([sol[i, :] + 1])[0]
+            antlions_fitness[i] = self.utils.traceTour(problem, sol, i)
 
         sorted_indexes = np.argsort(antlions_fitness)
         sorted_antlion_fitness = antlions_fitness[sorted_indexes]
@@ -180,7 +180,7 @@ class ALO:
                 Flag4lb = ant_position[i, :] < self.lb
                 ant_position[i, :] = (ant_position[i, :] * (~(Flag4ub + Flag4lb))) + self.ub * Flag4ub + self.lb * Flag4lb
                 sol = np.argsort(ant_position, axis=1)
-                ants_fitness[i] = problem.trace_tours([sol[i, :] + 1])[0]
+                ants_fitness[i] = self.utils.traceTour(problem, sol, i)
             
             double_population = np.vstack((Sorted_antlions, ant_position))
             double_fitness = np.concatenate((sorted_antlion_fitness, ants_fitness))

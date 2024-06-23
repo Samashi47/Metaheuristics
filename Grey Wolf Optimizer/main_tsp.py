@@ -6,7 +6,7 @@ from Utils import Utils # type: ignore
 
 # Initialize and optimize using GWO
 gwo = GWO(SearchAgents_no=100, Max_iter=1000, lb=-1, ub=1)
-alpha_score, Bsol, convergence_curve = gwo.optimize_tsp('eil76')
+alpha_score, Bsol, convergence_curve = gwo.optimize_tsp('brg180')
 
 print("Best distance:", alpha_score)
 print("Best tour:", Bsol)

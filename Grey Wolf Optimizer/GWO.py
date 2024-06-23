@@ -7,7 +7,6 @@ class GWO:
     def __init__(self, SearchAgents_no=50, Max_iter=100, lb=-5, ub=5, dim=0, fobj='bentCigar'):
         self.SearchAgents_no = SearchAgents_no
         self.Max_iter = Max_iter
-        self.Max_iter = self.Max_iter[0]
         self.lb = lb
         self.ub = ub
         self.dim = dim
@@ -129,8 +128,8 @@ class GWO:
                 
                 sol = np.argsort(Positions, axis=1)
                 # Calculate objective function for each search agent
-                fitness = problem.trace_tours([sol[i, :] + 1])[0]
-                
+                fitness = self.utils.traceTour(problem, sol, i)
+                    
                 # Update Alpha, Beta, and Delta
                 if fitness < Alpha_score:
                     Alpha_score = fitness  # Update alpha

@@ -152,7 +152,7 @@ class MVO:
                 Universes[i, :] = (Universes[i, :] * (~(Flag4ub + Flag4lb))) + self.ub * Flag4ub + self.lb * Flag4lb
                 sol = np.argsort(Universes, axis=1)
                 # Calculate the inflation rate (fitness) of universes
-                Inflation_rates[i] = problem.trace_tours([sol[i, :] + 1])[0]
+                Inflation_rates[i] = self.utils.traceTour(problem, sol, i)
                 # Elitism
                 if Inflation_rates[i] < Best_universe_Inflation_rate:
                     Best_universe_Inflation_rate = Inflation_rates[i]
