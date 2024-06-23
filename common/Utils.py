@@ -3,10 +3,20 @@ import plotly.graph_objects as go
 import tsplib95 as tsp
 
 class Utils:
+    def traceTour(self, problem, solution, index):
+        if problem.edge_weight_type != "EXPLICIT" or (problem.edge_weight_format == "LOWER_DIAG_ROW" and problem.display_data_type == "TWOD_DISPLAY"):
+                return problem.trace_tours([solution[index, :] + 1])[0]
+        else:
+            return problem.trace_tours([solution[index, :]])[0]
+        
     def LoadProblem(self, problem='eil51'):
-        tsplib = tsp.load('tsp_problems/' + problem + '.tsp')
-        return tsplib
-    
+        try:
+            tsplib = tsp.load('tsp_problems/' + problem + '.tsp')
+            return tsplib
+        except FileNotFoundError:
+            print(f"File {problem}.tsp not found in tsp_problems directory.")
+            return None
+        
     def RouletteWheelSelection(self, weights):
         accumulation = np.cumsum(weights)
         p = np.random.rand() * accumulation[-1]
