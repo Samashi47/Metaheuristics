@@ -31,13 +31,9 @@ class Utils:
         return choice
     
     def initialization(self, SearchAgents_no, dim, ub, lb):
-        # Boundary_no = len(ub)  # number of boundaries
-        # If the boundaries of all variables are equal and user enter a single
-        # number for both ub and lb
         if isinstance(ub, (int, float)):
             Positions = np.random.rand(SearchAgents_no, dim) * (ub - lb) + lb
 
-        # If each variable has a different lb and ub
         if isinstance(ub, list):
             Positions = np.zeros((SearchAgents_no, dim))
             for i in range(dim):
@@ -45,6 +41,23 @@ class Utils:
                 lb_i = lb[i]
                 Positions[:, i] = np.random.rand(SearchAgents_no) * (ub_i - lb_i) + lb_i
 
+        return Positions
+    
+    def igwo_initialization(self, SearchAgents_no, dim, ub, lb):
+        Positions = np.zeros((SearchAgents_no, dim))
+        y = np.random.rand()
+        v = 2
+        N = SearchAgents_no
+        
+        for i in range(SearchAgents_no):
+            for j in range(dim):
+                if y <= 0.5:
+                    y = v * y + np.random.rand() / N
+                else:
+                    y = v * (1 - y) + np.random.rand() / N
+                
+                Positions[i, j] = lb + y * (ub - lb)
+        
         return Positions
     
     def Get_Functions_details(self, F):
@@ -83,9 +96,14 @@ class Utils:
             'F20': (self.F20, 0, 1, 6),
             'F21': (self.F21, 0, 10, 4),
             'F22': (self.F22, 0, 10, 4),
-            'F23': (self.F23, 0, 10, 4)
+            'F23': (self.F23, 0, 10, 4),
+            'F24': (self.F24, -100, 100, 3)
         }
         return switcher.get(F, "Invalid function")
+    
+    def F24(self,x):
+        x = np.array(x).ravel()
+        return np.sum((x-1)**2)
     
     def bentCigar(self, x):
         x = np.array(x).ravel()
@@ -264,7 +282,7 @@ class Utils:
 
     def func_plot(self, func_name,Best_pos,algo_name):
         fobj, lb, ub, dim = self.Get_Functions_details(func_name)
-        if func_name in ['bentCigar', 'zakharov', 'rosenbrock', 'rastrigin', 'schafferF6',
+        if func_name in ['F24','bentCigar', 'zakharov', 'rosenbrock', 'rastrigin', 'schafferF6',
          'levy', 'HighConditionedElliptic', 'discus', 'ackley', 'weierstrass',
          'griewank', 'happyCat']:
             x = y = np.arange(-100, 101, 1)
