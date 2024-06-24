@@ -12,6 +12,100 @@ class GWO:
         self.dim = dim
         self.fobj = fobj
         self.utils = Utils()
+        
+    def gaussian_a(self, t, T_max):
+        GPhi = 2 - t * ((2) / self.Max_iter)
+        SPhi = a = 2 * np.exp(-(t/(0.3*self.Max_iter))**2)
+        partial = 0.6
+        
+        if t <= partial * T_max:
+            a = GPhi * (1 / (np.sqrt(2 * np.pi) * (T_max/3))) * np.exp(t**2 / (2 * (T_max/3)**2))
+        else:
+            a = SPhi * (1 / (np.sqrt(2 * np.pi) * (T_max/3))) * np.exp(t**2 / (2 * (T_max/3)**2))
+        
+        return a
+    
+    def improved_optimize(self):
+        Alpha_pos = np.zeros(self.dim)
+        Alpha_score = float('inf')
+
+        Beta_pos = np.zeros(self.dim)
+        Beta_score = float('inf')
+
+        Delta_pos = np.zeros(self.dim)
+        Delta_score = float('inf')
+
+        Positions = self.utils.igwo_initialization(self.SearchAgents_no, self.dim, self.ub, self.lb)
+
+        Convergence_curve = np.zeros(self.Max_iter)
+
+        for l in range(self.Max_iter):
+            for i in range(self.SearchAgents_no):
+                fitness = self.fobj(Positions[i, :])
+
+                if fitness < Alpha_score:
+                    Alpha_score = fitness
+                    Alpha_pos = Positions[i, :].copy()
+
+                if Alpha_score < fitness < Beta_score:
+                    Beta_score = fitness
+                    Beta_pos = Positions[i, :].copy()
+
+                if Beta_score < fitness < Delta_score:
+                    Delta_score = fitness
+                    Delta_pos = Positions[i, :].copy()
+
+            a = self.gaussian_a(l, self.Max_iter)
+
+            for i in range(np.shape(Positions)[0]):
+                for j in range(np.shape(Positions)[1]):
+                    r1 = np.random.rand()
+                    r2 = np.random.rand()
+
+                    A1 = 2 * a * r1 - a
+                    C1 = 2 * r2
+
+                    D_alpha = abs(C1 * Alpha_pos[j] - Positions[i, j])
+                    X1 = Alpha_pos[j] - A1 * D_alpha
+
+                    r1 = np.random.rand()
+                    r2 = np.random.rand()
+
+                    A2 = 2 * a * r1 - a
+                    C2 = 2 * r2
+
+                    D_beta = abs(C2 * Beta_pos[j] - Positions[i, j])
+                    X2 = Beta_pos[j] - A2 * D_beta
+
+                    r1 = np.random.rand()
+                    r2 = np.random.rand()
+
+                    A3 = 2 * a * r1 - a
+                    C3 = 2 * r2
+
+                    D_delta = abs(C3 * Delta_pos[j] - Positions[i, j])
+                    X3 = Delta_pos[j] - A3 * D_delta
+
+                    # Calculate weights based on fitness
+                    W_alpha = (self.fobj(Alpha_pos) + self.fobj(Beta_pos) + self.fobj(Delta_pos)) / self.fobj(Alpha_pos)
+                    W_beta = (self.fobj(Alpha_pos) + self.fobj(Beta_pos) + self.fobj(Delta_pos)) / self.fobj(Beta_pos)
+                    W_delta = (self.fobj(Alpha_pos) + self.fobj(Beta_pos) + self.fobj(Delta_pos)) / self.fobj(Delta_pos)
+
+                    # Calculate weights based on position
+                    V1 = (abs(X1) + abs(X2) + abs(X3)) / abs(X1)
+                    V2 = (abs(X1) + abs(X2) + abs(X3)) / abs(X2)
+                    V3 = (abs(X1) + abs(X2) + abs(X3)) / abs(X3)
+                    
+                    # Positions[i, j] = (X1 + X2 + X3) / 3
+                    # Positions[i, j] = (X1 * W_alpha + X2 * W_beta + X3 * W_delta) / (W_alpha + W_beta + W_delta)
+                    Positions[i, j] = ((V1 * W_alpha) + (V2 * W_beta) + (V3 * W_delta)) / 3
+            
+            Convergence_curve[l] = Alpha_score
+            
+            if (l + 1) % 50 == 0:
+                print(f'At iteration {l + 1}, the Alpha wolf fitness is {Alpha_score}')
+
+        return Alpha_score, Alpha_pos, Convergence_curve
     
     def optimize(self):
         Alpha_pos = np.zeros(self.dim)
