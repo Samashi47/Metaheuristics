@@ -46,6 +46,9 @@ You can run the following command to install the dependencies:
 ```bash
 pip3 install -r requirements.txt
 ```
+> [!NOTE]  
+> You should run the main scripts of the ALO, GWO, and MVO algorithms from the base directory so that they can access the common folder that has the Utils class in it (e.g. `python '.\Grey Wolf Optimizer\main.py'`).
+
 ### C++
 Compile the C++ files. For example, to run the `Simulated Annealing` implementation, you can compile the `sa.cpp` file in the `Simulated Annealing` folder using g++:
 ```bash
