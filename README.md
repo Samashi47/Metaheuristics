@@ -11,7 +11,7 @@ The purpose of this repository is to provide implementations of various metaheur
 ## Note
 
 The Python implementations in this repository for GWO [[1]](#1)[[2]](#2), MVO [[3]](#3)[[4]](#4), and ALO [[5]](#5)[[6]](#6) are adapted from the MATLAB implementations by Dr. Seyedali Mirjalili.
-### Hashing Algorithms
+### Optimization Algorithms
 
 |       Algorithm       |       Python       |        C++         |
 |-----------------------|--------------------|--------------------|
